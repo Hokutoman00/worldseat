@@ -120,8 +120,8 @@ export default function EvidencePage() {
           <a href="https://worldseat.vercel.app" target="_blank" rel="noreferrer">▶ Live app (no login)</a>
           <a href="https://youtu.be/2OD3Ye1jEqo" target="_blank" rel="noreferrer">▶ Demo video — 2:57</a>
           <a href="https://github.com/Hokutoman00/worldseat" target="_blank" rel="noreferrer">▶ Public source repo</a>
-          <a href="https://github.com/Hokutoman00/worldseat/blob/master/EVIDENCE.md" target="_blank" rel="noreferrer">▶ EVIDENCE.md (this page, in repo)</a>
-          <a href="https://github.com/Hokutoman00/worldseat/blob/master/scripts/stress.mjs" target="_blank" rel="noreferrer">▶ stress.mjs (the invariant test)</a>
+          <a href="https://github.com/Hokutoman00/worldseat/blob/main/EVIDENCE.md" target="_blank" rel="noreferrer">▶ EVIDENCE.md (this page, in repo)</a>
+          <a href="https://github.com/Hokutoman00/worldseat/blob/main/scripts/stress.mjs" target="_blank" rel="noreferrer">▶ stress.mjs (the invariant test)</a>
         </div>
       </section>
     </div>
