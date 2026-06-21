@@ -1,6 +1,9 @@
 'use client';
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Backend, Seat, BreakItResult, WitnessVerdict, Ticket } from '@/lib/types';
+
+const EVENT = 'AURORA WORLD TOUR · 2026'; // the on-sale this command center is rehearsing
 
 const ROWS = 'ABCDEFGH'.split('');
 const COLS = 12;
@@ -101,7 +104,19 @@ export default function Page() {
   return (
     <div className="wrap">
       <header className="masthead">
-        <h1>WorldSeat<span className="dot">.</span></h1>
+        <h1>WorldSeat<span className="dot">.</span> <span className="cmdkicker">On-Sale Command Center</span></h1>
+        <div className="cmdbar">
+          <span className="cmdcell"><i>event</i>{EVENT}</span>
+          <span className="cmdcell"><i>venue</i>{ROWS.length * COLS} seats · 8×12</span>
+          <span className="cmdcell"><i>regions</i>us-east-1 ⇄ us-east-2 active-active</span>
+          <span className="cmdcell"><i>witness</i>us-west-2</span>
+          <span className="cmdcell"><i>burst</i>up to 60 buyers / seat</span>
+          <Link className="cmdproof" href="/evidence">Proof panel →</Link>
+        </div>
+        <p className="dbline">
+          <b>Product database: Amazon Aurora DSQL</b> — the only database the product runs on.
+          <span> DynamoDB appears solely as a <b>removable benchmark foil</b>; remove it and every feature still runs on DSQL alone.</span>
+        </p>
         <div className="hero">
           <div className="herocell ok">
             <div className="herok">Aurora DSQL<span className="herotag">product</span></div>
