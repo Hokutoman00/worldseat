@@ -1,0 +1,218 @@
+:root {
+  --bg: #0b0d10;
+  --panel: #14171c;
+  --panel-2: #1b1f26;
+  --line: #2a2f38;
+  --ink: #e8eaed;
+  --muted: #9aa3af;       /* >= 4:1 on --bg */
+  --faint: #6b7280;
+  --accent: #4ea3ff;      /* single brand accent */
+  --ok: #2fbf71;
+  --bad: #ff5d5d;
+  --warn: #e8b923;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+body {
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 28px 22px 80px; }
+
+.masthead { border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 22px; }
+.masthead h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.2px; }
+.masthead h1 .dot { color: var(--accent); }
+.masthead p { margin: 0; color: var(--muted); max-width: 760px; }
+/* one-line orientation above the fold: which DB is the product, which is the foil */
+.masthead p.lede { color: var(--ink); font-size: 13.5px; margin: 0 0 10px; padding: 9px 12px; background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 3px; }
+.masthead p.lede b { color: var(--ink); }
+.kbd { color: var(--accent); }
+
+/* first-view hero: the whole verdict in three seconds — same code, one variable (the database) */
+.hero { display: flex; align-items: stretch; gap: 10px; margin: 0 0 14px; }
+.hero .herocell { flex: 1; padding: 13px 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--panel); }
+.hero .herocell.ok { border-left: 2px solid var(--ok); }
+.hero .herocell.bad { border-left: 2px solid var(--bad); }
+.hero .herok { font-size: 12px; color: var(--muted); letter-spacing: .3px; }
+.hero .herotag { display: inline-block; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--faint); vertical-align: 1px; margin-left: 6px; }
+.hero .herocell.ok .herotag { color: var(--ok); border-color: var(--ok); }
+.hero .herocell.bad .herotag { color: var(--bad); border-color: var(--bad); }
+.hero .herov { font-size: 44px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; margin: 4px 0 2px; }
+.hero .herocell.ok .herov { color: var(--ok); }
+.hero .herocell.bad .herov { color: var(--bad); }
+.hero .herou { font-size: 10.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .8px; }
+.hero .heron { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+.hero .herovs { align-self: center; text-align: center; color: var(--faint); font-size: 11px; line-height: 1.45; min-width: 92px; }
+@media (max-width: 720px) { .hero { flex-direction: column; gap: 8px; } .hero .herovs { min-width: 0; } }
+
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  margin: 18px 0 20px; padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+}
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.seg button {
+  font-family: var(--mono); font-size: 13px; padding: 8px 14px; background: transparent; color: var(--muted);
+  border: 0; cursor: pointer; border-right: 1px solid var(--line);
+}
+.seg button:last-child { border-right: 0; }
+.seg button.on { background: var(--panel-2); color: var(--ink); }
+.seg button.on.dsql { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
+.seg button.on.naive { color: var(--bad); box-shadow: inset 0 -2px 0 var(--bad); }
+
+.btn {
+  font-family: var(--mono); font-size: 13px; padding: 8px 14px; border-radius: 3px; cursor: pointer;
+  background: var(--panel-2); color: var(--ink); border: 1px solid var(--line);
+}
+.btn:hover { border-color: var(--faint); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn.primary { background: var(--accent); color: #06121f; border-color: var(--accent); font-weight: 600; }
+.btn.danger { background: transparent; color: var(--bad); border-color: var(--bad); }
+.field { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; }
+.field input {
+  font-family: var(--mono); width: 64px; background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 3px; padding: 7px 9px;
+}
+.field input.wide { width: 120px; }
+.spacer { flex: 1; }
+.region-note { color: var(--faint); font-size: 12px; }
+
+/* two clearly separated jobs: buy a seat (left) vs stress-test it (right) — legible in one glance */
+.tgroup { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.tlabel { color: var(--faint); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; padding-right: 2px; }
+.tdiv { width: 1px; align-self: stretch; background: var(--line); margin: -2px 6px; }
+@media (max-width: 720px) { .tdiv { width: 100%; height: 1px; margin: 4px 0; } }
+.subnote { margin: -10px 0 20px; color: var(--faint); font-size: 12px; }
+
+/* money/human stakes — turns the abstract "oversold" number into something a judge feels */
+.stakes { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 3px; background: var(--panel-2); color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+.stakes b { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stakes i { font-style: italic; color: var(--faint); }
+.stakes.bad { border-color: var(--bad); } .stakes.bad b { color: var(--bad); }
+.stakes.ok { border-color: var(--ok); } .stakes.ok b { color: var(--ok); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 360px; gap: 18px; align-items: start; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } } /* minmax(0,…) so the track can shrink below its content and never force page-level horizontal overflow */
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 16px; }
+.panel h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 14px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* seat map */
+.stage { text-align: center; color: var(--faint); font-size: 11px; letter-spacing: 3px; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 16px; }
+.rows { display: flex; flex-direction: column; gap: 6px; }
+.row { display: flex; gap: 6px; align-items: center; justify-content: center; }
+.rowlab { width: 16px; color: var(--faint); font-size: 11px; }
+.seat {
+  width: 26px; height: 24px; border-radius: 2px; border: 1px solid var(--line);
+  background: var(--panel-2); color: var(--muted); font-size: 10px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; padding: 0;
+}
+.seat:hover { border-color: var(--accent); }
+.seat.sold { background: #20262e; color: var(--faint); cursor: default; border-color: var(--line); }
+.seat.target { outline: 2px solid var(--accent); outline-offset: 1px; }
+.seat.flash { animation: flash 0.5s ease; }
+@keyframes flash { 0% { background: var(--accent); } 100% { background: var(--panel-2); } }
+.legend { display: flex; gap: 16px; margin-top: 16px; color: var(--faint); font-size: 11px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+/* scoreboard */
+.score { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.cell { background: var(--panel-2); padding: 14px; }
+.cell .k { color: var(--faint); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.cell .v { font-size: 28px; font-weight: 600; margin-top: 4px; }
+.cell .v.zero { color: var(--ok); }
+.cell .v.over { color: var(--bad); }
+
+.verdict { margin-top: 14px; padding: 14px; border-radius: 3px; border: 1px solid var(--line); background: var(--panel-2); }
+.verdict.lin { border-color: var(--ok); }
+.verdict.vio { border-color: var(--bad); }
+.verdict .tag { font-weight: 600; }
+.verdict.lin .tag { color: var(--ok); }
+.verdict.vio .tag { color: var(--bad); }
+.verdict p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+.verdict p.reconcile { font-weight: 600; letter-spacing: .2px; }
+.verdict p.reconcile.ok { color: var(--ok); }
+.verdict p.reconcile.bad { color: var(--bad); }
+.verdict p.reconcile b { color: var(--ink); }
+.verdict p.caption { color: var(--faint); font-size: 12px; font-style: italic; }
+
+/* three independent sources — makes the honesty claim cross-source, not self-referential */
+.sources { margin-top: 12px; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.sources .srchead { background: var(--panel); color: var(--faint); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 7px 12px; border-bottom: 1px solid var(--line); }
+.sources .srcrow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 12px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+.sources .srcrow:last-child { border-bottom: 0; }
+.sources .srcrow b { font-size: 18px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.sources .srcrow.gap { background: var(--panel); font-weight: 600; }
+.sources .srcrow.gap.ok { color: var(--ok); } .sources .srcrow.gap.ok b { color: var(--ok); }
+.sources .srcrow.gap.bad { color: var(--bad); } .sources .srcrow.gap.bad b { color: var(--bad); }
+
+.hint { color: var(--faint); font-size: 12px; margin-top: 10px; }
+
+/* labelled example so the page shows its own punchline before any click — dimmed + dashed
+   badge keep it unmistakably distinct from a live result (live numbers replace it on Break it) */
+.preview { opacity: 0.82; }
+.pvbadge { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px dashed var(--line); border-radius: 3px; padding: 8px 11px; margin-bottom: 12px; line-height: 1.5; }
+.pvbadge b { color: var(--bad); }
+.preview .stakes { margin-top: 12px; }
+.preview .sources { margin-top: 12px; }
+/* side-by-side punchline: same code, the database is the only variable */
+.ab { display: flex; align-items: stretch; gap: 8px; margin-top: 12px; }
+.abcell { flex: 1; text-align: center; padding: 10px 8px; border: 1px solid var(--line); border-radius: 3px; background: var(--panel-2); }
+.abcell.ok { border-color: var(--ok); } .abcell.bad { border-color: var(--bad); }
+.abk { font-size: 11px; color: var(--faint); }
+.abv { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; margin: 2px 0; }
+.abcell.ok .abv { color: var(--ok); } .abcell.bad .abv { color: var(--bad); }
+.abu { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--faint); }
+.abx { align-self: center; color: var(--faint); font-size: 11px; }
+.abtag { display: inline-block; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--faint); vertical-align: 1px; }
+.abcell.ok .abtag { color: var(--ok); border-color: var(--ok); }
+.abcell.bad .abtag { color: var(--bad); border-color: var(--bad); }
+.log { margin-top: 14px; max-height: 160px; overflow: auto; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+.log div { padding: 2px 0; border-bottom: 1px dashed var(--line); }
+.busy { color: var(--accent); }
+/* confirmation + my tickets (the real ticketing flow) */
+.confirm { margin-top: 16px; padding: 12px 14px; border: 1px solid var(--ok); border-radius: 3px; background: var(--panel-2); }
+.confirm .tag { color: var(--ok); font-weight: 600; }
+.confirm p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+.confirm code, .tickets code { color: var(--accent); font-size: 11px; word-break: break-all; }
+
+.tickets { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 14px; }
+.tickets h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+.tickets ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.tickets li { display: flex; align-items: center; gap: 10px; padding: 7px 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 3px; }
+.tickets li b { color: var(--ink); min-width: 34px; }
+.tickets li .reg { margin-left: auto; color: var(--faint); font-size: 11px; }
+
+/* touch devices have no hover — keep seat affordances visible (L2) */
+@media (hover: none) {
+  .seat { border-color: var(--faint); }
+  .seat:hover { border-color: var(--faint); }
+}
+
+/* narrow screens: the 12-col seat grid is the hero — let each row scroll
+   horizontally instead of crushing/overflowing the buttons. */
+@media (max-width: 560px) {
+  .wrap { padding: 18px 12px 64px; }
+  .panel { padding: 14px 12px; }
+  .toolbar { gap: 8px; padding: 12px; }
+  .field input.wide { width: 96px; }
+  /* shrink the 12-col grid so common phones (390–414px) fit the whole floor with no scroll… */
+  .rows { gap: 4px; }
+  .row { gap: 4px; min-width: 0; justify-content: flex-start; overflow-x: auto; padding-bottom: 2px; }
+  /* …and min-width:0 lets overflow-x engage inside the flex column, so anything narrower
+     scrolls the row horizontally instead of breaking the page width. */
+  .row::-webkit-scrollbar { height: 4px; }
+  .row::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+  .rowlab { position: sticky; left: 0; background: var(--panel); z-index: 1; }
+  .seat { flex: 0 0 auto; width: 22px; height: 22px; font-size: 9.5px; }
+  .legend { flex-wrap: wrap; gap: 8px 14px; }
+}
+
+.honesty { margin-top: 22px; color: var(--faint); font-size: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
+.honesty b { color: var(--muted); }
+.err { color: var(--bad); font-size: 12px; margin-top: 8px; }

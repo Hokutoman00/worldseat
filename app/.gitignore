@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.vercel/
+*.log
+.env
+.env*.local
+next-env.d.ts
+
+.vercel

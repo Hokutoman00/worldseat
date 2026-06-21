@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>WorldSeat — architecture</title>
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#14171c; --panel-2:#1b1f26; --line:#2a2f38;
+    --ink:#e8eaed; --muted:#9aa3af; --faint:#6b7280;
+    --accent:#4ea3ff; --ok:#2fbf71; --bad:#ff5d5d;
+    --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);}
+  .sheet{width:1280px;padding:38px 44px 30px;}
+  h1{font-size:24px;font-weight:600;margin:0 0 2px;letter-spacing:-.2px;}
+  h1 .dot{color:var(--accent);}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 26px;}
+  .flow{display:flex;flex-direction:column;gap:0;align-items:center;}
+  .node{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:14px 18px;width:760px;}
+  .node .lab{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);}
+  .node .name{font-size:15px;font-weight:600;margin-top:3px;}
+  .node .meta{color:var(--muted);font-size:12px;margin-top:6px;}
+  .node .meta code{color:var(--accent);}
+  .arrow{color:var(--faint);font-size:12px;text-align:center;padding:8px 0;line-height:1.5;}
+  .arrow b{color:var(--muted);}
+  .split{display:flex;gap:22px;width:760px;}
+  .branch{flex:1;border-radius:3px;padding:14px 16px;border:1px solid var(--line);background:var(--panel);}
+  .branch.dsql{border-color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent);}
+  .branch.naive{border-color:var(--bad);box-shadow:inset 0 -2px 0 var(--bad);}
+  .branch .tag{font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+  .branch.dsql .tag{color:var(--accent);}
+  .branch.naive .tag{color:var(--bad);}
+  .branch .name{font-size:14px;font-weight:600;margin-top:4px;}
+  .branch .meta{color:var(--muted);font-size:12px;margin-top:8px;line-height:1.6;}
+  .branch .regions{margin-top:9px;display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{font-size:11px;border:1px solid var(--line);border-radius:2px;padding:3px 7px;color:var(--muted);background:var(--panel-2);}
+  .outcome{margin-top:10px;font-size:12px;font-weight:600;}
+  .branch.dsql .outcome{color:var(--ok);}
+  .branch.naive .outcome{color:var(--bad);}
+  .witness{width:760px;margin-top:18px;background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:14px 18px;}
+  .witness .lab{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);}
+  .witness .name{font-size:14px;font-weight:600;margin-top:3px;}
+  .witness .meta{color:var(--muted);font-size:12px;margin-top:6px;}
+  .witness .meta code{color:var(--accent);}
+  .foot{width:760px;margin:18px auto 0;color:var(--faint);font-size:11.5px;line-height:1.6;border-top:1px solid var(--line);padding-top:12px;}
+  .foot b{color:var(--muted);}
+  .center{display:flex;flex-direction:column;align-items:center;}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>WorldSeat<span class="dot">.</span> — architecture</h1>
+  <p class="sub">one seat, one truth, worldwide &nbsp;·&nbsp; global simultaneous on-sale ticketing on a single AWS database, with a live Jepsen-lite consistency witness judges can try to break</p>
+
+  <div class="flow center">
+    <div class="node">
+      <div class="lab">client</div>
+      <div class="name">Judge's browser — seat-map floor (8×12)</div>
+      <div class="meta">picks a seat, sets a buyer count, presses <b style="color:var(--ink)">Break&nbsp;it</b> → fires dozens of simultaneous purchases at one seat from two regions at once. Toggles the database live.</div>
+    </div>
+
+    <div class="arrow">│&nbsp; HTTPS<br>▼</div>
+
+    <div class="node">
+      <div class="lab">edge — vercel</div>
+      <div class="name">Next.js 14 (App Router) · <code style="color:var(--accent)">worldseat.vercel.app</code></div>
+      <div class="meta">Route Handlers run as serverless functions: <code>/api/seats</code> · <code>/api/purchase</code> · <code>/api/breakit</code> · <code>/api/reset</code> · <code>/api/witness</code>. <b style="color:var(--ink)">Both backends run the identical naive read-then-write code</b> — only the database under it changes.</div>
+    </div>
+
+    <div class="arrow">├─ backend = DSQL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └─ backend = naive<br>▼</div>
+
+    <div class="split">
+      <div class="branch dsql">
+        <div class="tag">aws database · strong</div>
+        <div class="name">Amazon Aurora DSQL</div>
+        <div class="meta">Distributed SQL, active-active, serializable via optimistic concurrency. IAM-token auth (DsqlSigner), Postgres-wire. Conflicting commits → loser gets <code style="color:var(--accent)">OC001/40001</code> → app retries → re-reads <i>sold</i> → cleanly rejects.</div>
+        <div class="regions"><span class="pill">us-east-1</span><span class="pill">us-east-2</span><span class="pill">witness us-west-2</span></div>
+        <div class="outcome">→ oversold = 0 · Linearizable ✓</div>
+      </div>
+      <div class="branch naive">
+        <div class="tag">aws database · eventual</div>
+        <div class="name">DynamoDB Global Tables</div>
+        <div class="meta">Multi-region replication, last-writer-wins. Each region reads "seat free" before the other's write has propagated → every buyer writes → the seats row shows one owner, but the append-only ledger records many.</div>
+        <div class="regions"><span class="pill">us-east-1</span><span class="pill">us-east-2</span><span class="pill">streams NEW+OLD</span></div>
+        <div class="outcome">→ oversold &gt; 0 · Violated ✗</div>
+      </div>
+    </div>
+
+    <div class="witness">
+      <div class="lab">proof layer</div>
+      <div class="name">Consistency Witness — Jepsen-lite linearizability check</div>
+      <div class="meta">Reads the <b style="color:var(--ink)">committed</b> per-seat history — DSQL <code>op_log</code> and the append-only DynamoDB <code>sales_naive</code> ledger — and computes <code>doubleSells = Σ max(0, confirmed−1)</code>. Verdict is calculated from real logs, never hard-coded. <b style="color:var(--ink)">Honesty guard:</b> oversold is counted from the ledger (ground truth), not from what the app hoped happened.</div>
+    </div>
+
+    <div class="foot">
+      <b>Stack:</b> Next.js 14.2 / React 18 on Vercel · <b>one AWS database</b> per mode (Aurora DSQL or DynamoDB Global Tables) · pg + @aws-sdk/dsql-signer + @aws-sdk/lib-dynamodb.<br>
+      <b>Live-proven:</b> DSQL 72 concurrent buyers → oversold = 0 · naive 72 concurrent buyers → oversold = 29 (4 seats double-sold) — identical application code, identical concurrency, different database.
+    </div>
+  </div>
+</div>
+</body>
+</html>

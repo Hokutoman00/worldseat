@@ -1,0 +1,29 @@
+# dependencies / build / deploy artifacts
+node_modules/
+.next/
+.vercel/
+out/
+dist/
+
+# secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+credentials
+.aws/
+
+# throwaway login/automation scripts (browser-driven AWS/Google/Gmail/IAM auth — may log creds)
+scripts/_*.mjs
+
+# internal hackathon-engine artifacts (strategy/scoring — not for public repo)
+SUBMISSION.md
+SUBMISSION-RECON.md
+FIELD-SCAN.md
+AMPLIFY.md
+design.md
+state/
+
+# OS / editor
+.DS_Store
+Thumbs.db
